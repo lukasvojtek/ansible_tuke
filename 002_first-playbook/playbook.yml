@@ -1,0 +1,49 @@
+---
+- name: First playbook
+  hosts:
+    - ubuntu
+  gather_facts: no
+
+  vars:
+    domains: 
+      - example.com
+      - facebook.com
+      - twitter.com
+
+  tasks:
+    - name: Install cmatrix, vim, htop, mysql
+      apt:
+        name: 
+          - cmatrix
+          - vim
+          - htop
+        state: present
+        update_cache: yes
+      become: yes
+      tags:
+        - install
+
+    - name: Something
+      shell: hostname
+      tags:
+        - debug
+
+    # - name: Copy static file
+    #   copy:
+    #     src: /tmp/test.txt
+    #     dest: /tmp/out.txt
+
+    - name: Create file from template
+      template:
+        src: template.j2
+        dest: "/tmp/{{ item }}.txt"
+      loop: "{{ domains }}"
+      tags:
+        - template
+
+  handlers:
+    - name: start mysql service
+      service: 
+        name: mysqld
+        state: started
+      become: yes
