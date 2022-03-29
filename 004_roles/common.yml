@@ -1,0 +1,14 @@
+---
+- name: First playbook
+  hosts:
+    - debian
+
+  vars:
+    servers:
+      - pc1
+      - pc2
+      - pc3
+      - pc4
+
+  roles:
+    - common

@@ -1,0 +1,10 @@
+---
+# tasks file for common
+- name: Create files from template {{ server_version }}
+  template:
+    src: template.j2
+    dest: "/tmp/{{ item }}.txt"
+  loop: "{{ servers }}"
+  become: yes
+  tags:
+    - template

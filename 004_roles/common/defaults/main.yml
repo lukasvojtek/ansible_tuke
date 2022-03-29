@@ -1,0 +1,6 @@
+---
+# defaults file for common
+servers: 
+  - galaxy
+  - vulcan
+  - ameros

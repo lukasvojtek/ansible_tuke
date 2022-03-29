@@ -1,0 +1,11 @@
+[webservers]
+debian	ansible_port=10022 ansible_become_password='{{ debian_become_password }}'
+ubuntu	ansible_port=11022
+
+[dbservers]
+centos	ansible_port=12022
+
+[all:vars]
+ansible_host=127.0.0.1
+ansible_user=vagrant
+ansible_password=vagrant 
