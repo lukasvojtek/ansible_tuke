@@ -1,14 +1,15 @@
 ---
 - name: First playbook
   hosts:
-    - ubuntu
-  gather_facts: no
+    - webservers
 
   vars:
-    domains: 
-      - example.com
-      - facebook.com
-      - twitter.com
+    servers: 
+      - galaxy
+      - vulcan
+      - ameros
+    bg_img_dest: /home/vagrant/Pictures/bg.jpg
+
 
   tasks:
     - name: Install software-properties-common
@@ -29,7 +30,7 @@
         - packages 
 
     # apt-get install htop vim php8.0 kazam filezilla bluefish
-    - name: Install cmatrix, vim, htop, mysql
+    - name: Install base packages
       apt:
         name:
           - htop
@@ -44,18 +45,25 @@
       tags:
         - packages
 
-  #   # - name: Copy static file
-  #   #   copy:
-  #   #     src: /tmp/test.txt
-  #   #     dest: /tmp/out.txt
+    - name: Download bg image
+      get_url:
+        url: https://cdn.wallpapersafari.com/55/73/ghY4rc.jpg
+        dest: "{{ bg_img_dest }}"
+      tags:
+        - background
 
-  # #   - name: Create file from template
-  # #     template:
-  # #       src: template.j2
-  # #       dest: "/tmp/{{ item }}.txt"
-  # #     loop: "{{ domains }}"
-  # #     tags:
-  # #       - template
+    - name: Set bg image
+      shell: "gsettings set org.gnome.desktop.background picture-uri 'file://{{ bg_img_dest }}'"
+      tags:
+        - background
+
+    - name: Create files from template {{ ansible_hostname }}
+      template:
+        src: template.j2
+        dest: "/tmp/{{ item }}.txt"
+      loop: "{{ servers }}"
+      tags:
+        - template
 
   # # handlers:
   # #   - name: start mysql service

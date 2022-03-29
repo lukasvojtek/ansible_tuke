@@ -1,8 +1,8 @@
 [webservers]
 debian	ansible_port=10022
+ubuntu	ansible_port=11022
 
 [dbservers]
-ubuntu	ansible_port=11022
 centos	ansible_port=12022
 
 [all:vars]
