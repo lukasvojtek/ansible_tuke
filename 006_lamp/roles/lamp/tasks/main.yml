@@ -1,0 +1,77 @@
+---
+# tasks file for lamp
+- name: Install software-properties-common
+  apt:
+    name: software-properties-common
+    state: present
+    update_cache: yes
+  become: yes
+  tags:
+    - lamp
+
+- name: Add php8.0 repo
+  apt_repository:
+    repo: ppa:ondrej/php
+    state: present
+  become: yes
+  tags:
+    - lamp 
+
+- name: Install LAMP
+  apt:
+    name: 
+      - apache2
+      - php8.0
+      - php8.0-mysql
+      - mariadb-server
+      - mariadb-client
+    update_cache: yes
+    state: present
+  become: yes
+  tags:
+    - lamp
+  # notify:
+  #   - start apache
+  #   - start mysql
+
+- name: Start apache2 + mysql
+  service:
+    name: "{{ item }}"
+    state: started
+  become: yes
+  loop:
+    - apache2
+    - mysql
+
+- name: Deploy index.html
+  copy:
+    src: index.html
+    dest: /var/www/html/index.html
+  become: yes
+  tags:
+    - deploy
+
+- name: Deploy index.php
+  copy:
+    src: index.php
+    dest: /var/www/html/index.php
+  become: yes
+  tags:
+    - deploy
+
+- name: Get stat of /var/www/html/index.html
+  ansible.builtin.stat:
+    path: /var/www/html/index.html
+  register: result
+  tags:
+    - deploy
+
+- name: Make sure index.html does not exist
+  file:
+    path: /var/www/html/index.html
+    state: absent
+  become: yes
+  when: result.stat.exists
+  tags:
+    - deploy
+
