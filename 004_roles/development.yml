@@ -3,6 +3,9 @@
   hosts:
     - development
 
+  vars: 
+    bg_image: https://cdn.wallpapersafari.com/55/73/ghY4rc.jpg
+
   roles:
     - common
     - dev

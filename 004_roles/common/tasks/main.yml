@@ -37,10 +37,11 @@
   get_url:
     url: "{{ bg_image }}"
     dest: "{{ bg_img_dest }}"
+    force: yes
   tags:
     - background
 
-- name: Set bg image
+- name: Set bg image {{ bg_img_dest }}
   shell: "gsettings set org.gnome.desktop.background picture-uri 'file://{{ bg_img_dest }}'"
   tags:
     - background
