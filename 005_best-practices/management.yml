@@ -1,0 +1,12 @@
+---
+- name: Administrative playbook
+  hosts:
+    - management
+
+  vars: 
+    bg_image: https://www.reactive-executive.com/wp-content/uploads/2017/12/Change-Management.jpg
+
+  roles:
+    - common
+    - dev
+    - office

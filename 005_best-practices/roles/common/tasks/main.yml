@@ -1,0 +1,55 @@
+---
+# tasks file for common
+- name: Install software-properties-common
+  apt:
+    name: software-properties-common
+    state: present
+    update_cache: yes
+  become: yes
+  tags:
+    - packages
+
+- name: Add php8.0 repo
+  apt_repository:
+    repo: ppa:ondrej/php
+    state: present
+  become: yes
+  tags:
+    - packages 
+
+# apt-get install htop vim php8.0 kazam filezilla bluefish
+- name: Install base packages
+  apt:
+    name:
+      - htop
+      - vim
+      - php8.0
+      - kazam
+      - filezilla
+      - bluefish
+    state: present
+    update_cache: yes
+  become: yes
+  tags:
+    - packages
+
+- name: Download bg image
+  get_url:
+    url: "{{ bg_image }}"
+    dest: "{{ bg_img_dest }}"
+    force: yes
+  tags:
+    - background
+
+- name: Set bg image {{ bg_img_dest }}
+  shell: "gsettings set org.gnome.desktop.background picture-uri 'file://{{ bg_img_dest }}'"
+  tags:
+    - background
+
+- name: Create files from template {{ ansible_hostname }}
+  template:
+    src: template.j2
+    dest: "/tmp/{{ item }}.txt"
+  loop: "{{ servers }}"
+  tags:
+    - template

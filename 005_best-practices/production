@@ -1,0 +1,12 @@
+[administrative]
+ubuntu
+
+[development]
+ubuntu
+
+[management]
+ubuntu
+
+[others]
+debian
+centos
