@@ -1,0 +1,8 @@
+---
+- name: Administrative playbook
+  hosts:
+    - development
+
+  roles:
+    - common
+    - dev

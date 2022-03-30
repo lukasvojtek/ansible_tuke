@@ -1,0 +1,6 @@
+---
+# defaults file for dev
+docker_users: 
+  - "{{ ansible_user }}"
+  - root
+  

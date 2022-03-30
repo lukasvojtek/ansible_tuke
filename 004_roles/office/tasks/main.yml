@@ -1,0 +1,9 @@
+---
+# tasks file for office
+- name: Install office packages
+  apt:
+    name:
+      - pidgin
+      - libreoffice
+    state: present
+  become: yes
