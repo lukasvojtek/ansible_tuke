@@ -21,6 +21,14 @@
     - lamp
   when: ansible_distribution == 'Ubuntu'
 
+- name: Add php signing key
+  apt_key:
+    url: https://packages.sury.org/php/apt.gpg
+  become: yes
+  tags:
+    - lamp
+  when: ansible_distribution == 'Debian'
+
 - name: Add php8.0 repo for debian
   apt_repository:
     repo: "deb https://packages.sury.org/php/ {{ ansible_lsb.codename }} main"
