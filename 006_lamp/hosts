@@ -1,6 +1,6 @@
 [webservers]
-ubuntu
-debian
+centos
 
 [others]
-centos
+ubuntu
+debian

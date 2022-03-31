@@ -4,6 +4,9 @@
 - include_tasks: "{{ ansible_os_family }}-family.yml"
   when: ansible_os_family == 'Debian'
 
+- include_tasks: "{{ ansible_os_family }}-family.yml"
+  when: ansible_os_family == 'RedHat'
+
 - name: Deploy index.html
   copy:
     src: index.html
