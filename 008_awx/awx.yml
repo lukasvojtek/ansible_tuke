@@ -1,7 +1,7 @@
 ---
 - name: AWX testing
   hosts:
-    - locals
+    - mm_locals
 
   roles:
     - awx
