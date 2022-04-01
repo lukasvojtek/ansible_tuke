@@ -1,0 +1,78 @@
+---
+# tasks file for mariadb-conf
+- become: yes
+  tags:
+    - db
+  block:
+    - name: Install phpmyadmin
+      apt:
+        name: 
+          - phpmyadmin
+          - php8.0-mbstring
+          - python3-pip
+        state: present
+        update_cache: yes
+      notify: restart apache
+
+    - name: Install PyMySQL
+      pip:
+        name: PyMySQL
+        executable: pip3
+
+    - name: Include phpmyadmin conf into apache.conf
+      lineinfile:
+        line: Include /etc/phpmyadmin/apache.conf
+        path: /etc/apache2/apache2.conf
+        regexp: "^Include.+phpmyadmin/.+.conf$"
+        insertafter: EOF
+      notify: restart apache
+
+    # - name: Generate root password using openssl
+    #   shell: 
+    #     cmd: openssl rand -base64 32
+    #     creates: /root/.my.cnf
+    #   register: root_pass_output
+
+    # - debug: 
+    #     var: root_pass_output
+
+    - name: Generate root password using openssl using password module
+      set_fact:
+        root_pass: "{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=32') }}"
+
+    - debug: 
+        var: root_pass
+
+    - name: Create database user using hashed password with all database privileges
+      community.mysql.mysql_user:
+        name: root
+        password: "{{ root_pass }}"
+        host: "{{ item }}"
+        priv: '*.*:ALL'
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+      loop:
+        - 127.0.0.1
+        - ::1
+        - localhost
+        - "{{ ansible_hostname }}"
+
+    - name: Removes anonymous user account for localhost
+      community.mysql.mysql_user:
+        name: ''
+        host: localhost
+        state: absent
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Delete database with name 'test'
+      become: yes
+      mysql_db:
+        name: test
+        state: absent
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+
+
+
+
+

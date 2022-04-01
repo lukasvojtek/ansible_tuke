@@ -1,0 +1,12 @@
+---
+- name: Install LAMP, deploy app and configure DB
+  hosts:
+    - webservers
+
+  vars:
+    mysql_root_hosts:
+      - facebook.com
+      - twitter.com
+
+  roles:
+    - mariadb-conf

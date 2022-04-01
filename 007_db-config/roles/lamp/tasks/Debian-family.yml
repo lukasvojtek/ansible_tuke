@@ -1,0 +1,65 @@
+- name: Install software-properties-common
+  apt:
+    name: 
+      - lsb-release
+      - ca-certificates
+      - apt-transport-https
+      - software-properties-common
+      - gnupg2
+    state: present
+    update_cache: yes
+  become: yes
+  tags:
+    - lamp
+
+- name: Add php8.0 repo for ubuntu
+  apt_repository:
+    repo: ppa:ondrej/php
+    state: present
+  become: yes
+  tags:
+    - lamp
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Add php signing key
+  apt_key:
+    url: https://packages.sury.org/php/apt.gpg
+  become: yes
+  tags:
+    - lamp
+  when: ansible_distribution == 'Debian'
+
+- name: Add php8.0 repo for debian
+  apt_repository:
+    repo: "deb https://packages.sury.org/php/ {{ ansible_lsb.codename }} main"
+    filename: sury-php.list
+  become: yes
+  tags:
+    - lamp
+  when: ansible_distribution == 'Debian'
+
+- name: Install LAMP
+  apt:
+    name: 
+      - apache2
+      - php8.0
+      - php8.0-mysql
+      - mariadb-server
+      - mariadb-client
+    update_cache: yes
+    state: present
+  become: yes
+  tags:
+    - lamp
+  # notify:
+  #   - start apache
+  #   - start mysql
+
+- name: Start apache2 + mysql
+  service:
+    name: "{{ item }}"
+    state: started
+  become: yes
+  loop:
+    - apache2
+    - mysql

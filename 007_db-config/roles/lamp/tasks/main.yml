@@ -1,0 +1,40 @@
+---
+# tasks file for lamp
+
+- include_tasks: "{{ ansible_os_family }}-family.yml"
+  when: ansible_os_family == 'Debian'
+
+- include_tasks: "{{ ansible_os_family }}-family.yml"
+  when: ansible_os_family == 'RedHat'
+
+- name: Deploy index.html
+  copy:
+    src: index.html
+    dest: /var/www/html/index.html
+  become: yes
+  tags:
+    - deploy
+
+- name: Deploy index.php
+  copy:
+    src: index.php
+    dest: /var/www/html/index.php
+  become: yes
+  tags:
+    - deploy
+
+- name: Get stat of /var/www/html/index.html
+  ansible.builtin.stat:
+    path: /var/www/html/index.html
+  register: result
+  tags:
+    - deploy
+
+- name: Make sure index.html does not exist
+  file:
+    path: /var/www/html/index.html
+    state: absent
+  become: yes
+  when: result.stat.exists
+  tags:
+    - deploy
