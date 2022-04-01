@@ -1,0 +1,7 @@
+---
+- name: Windows playbook
+  hosts:
+    - all
+
+  roles:
+    - testing

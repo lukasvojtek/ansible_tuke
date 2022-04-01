@@ -1,0 +1,6 @@
+ansible_connection: winrm
+ansible_port: 15986
+ansible_winrm_server_cert_validation: ignore
+ansible_host: 127.0.0.1
+ansible_user: vagrant
+ansible_password: '{{ win_password }}'

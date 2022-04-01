@@ -1,0 +1,19 @@
+---
+# tasks file for testing
+- name: Install Chocolatey
+  ansible.windows.win_powershell:
+    script: Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+- name: Install git, chrome
+  win_chocolatey:
+    name: 
+      - git
+      - googlechrome
+    state: present
+
+- name: Warn logged in users of impending upgrade
+  community.windows.win_msg:
+    display_seconds: 60
+    msg: Automated upgrade about to start.  Please save your work and log off before.
+  tags:
+    - msg
