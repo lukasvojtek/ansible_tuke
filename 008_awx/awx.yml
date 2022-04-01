@@ -1,7 +1,7 @@
 ---
 - name: AWX testing
   hosts:
-    - webservers
+    - locals
 
   roles:
     - awx
