@@ -1,0 +1,6 @@
+---
+# tasks file for awx
+- debug: 
+  msg: Caute!!!
+
+- shell: hostname

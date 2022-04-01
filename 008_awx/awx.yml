@@ -1,0 +1,7 @@
+---
+- name: AWX testing
+  hosts:
+    - webservers
+
+  roles:
+    - awx
